@@ -1,0 +1,350 @@
+.page {
+  padding: 36px 40px 60px;
+  max-width: 900px;
+}
+
+.header {
+  margin-bottom: 28px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  color: var(--gray-900);
+  margin-bottom: 4px;
+}
+
+.sub {
+  font-size: 13.5px;
+  color: var(--gray-500);
+}
+
+/* Balance card */
+.balanceCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 32px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  margin-bottom: 40px;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.balanceLeft { flex: 1; }
+
+.balanceLabel {
+  font-size: 12px;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.balanceNum {
+  font-size: 52px;
+  font-weight: 500;
+  letter-spacing: -2px;
+  color: var(--gray-900);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.balancePlan {
+  font-size: 13px;
+  color: var(--gray-500);
+}
+
+.balancePlan strong {
+  color: var(--gray-900);
+  font-weight: 500;
+}
+
+.balanceRight {
+  flex: 1;
+  min-width: 220px;
+}
+
+.balanceBar {
+  height: 6px;
+  background: var(--gray-100);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.balanceBarFill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.8s ease;
+}
+
+.balanceBarMeta {
+  font-size: 12px;
+  color: var(--gray-400);
+}
+
+/* Section */
+.section {
+  margin-bottom: 44px;
+}
+
+.sectionHeader {
+  margin-bottom: 18px;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gray-900);
+  letter-spacing: -0.3px;
+  margin-bottom: 4px;
+}
+
+.sectionSub {
+  font-size: 13px;
+  color: var(--gray-500);
+}
+
+/* Credit packs */
+.packsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.packCard {
+  position: relative;
+  padding: 22px 20px;
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all var(--transition-md);
+}
+
+.packCard:hover {
+  border-color: var(--gray-300);
+  box-shadow: var(--shadow-sm);
+}
+
+.packBadge {
+  position: absolute;
+  top: -8px;
+  right: 14px;
+  padding: 2px 9px;
+  background: var(--gray-900);
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: 10.5px;
+  font-weight: 500;
+}
+
+.packCredits {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--gray-900);
+  letter-spacing: -0.5px;
+}
+
+.packPrice {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -1px;
+  color: var(--gray-900);
+}
+
+.packPer {
+  font-size: 12px;
+  color: var(--gray-400);
+  margin-bottom: 14px;
+}
+
+.packBtn {
+  height: 36px;
+  background: var(--gray-900);
+  color: white;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font);
+  transition: background var(--transition);
+}
+
+.packBtn:hover {
+  background: var(--accent-hover);
+}
+
+/* Plans */
+.plansGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.planCard {
+  position: relative;
+  padding: 24px;
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.planCurrent {
+  border-color: var(--gray-900);
+}
+
+.currentBadge {
+  position: absolute;
+  top: -9px;
+  left: 20px;
+  padding: 3px 10px;
+  background: var(--gray-900);
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: 10.5px;
+  font-weight: 500;
+}
+
+.planName {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gray-500);
+  margin-bottom: 6px;
+}
+
+.planPrice {
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: -1px;
+  color: var(--gray-900);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.planPriceNote {
+  font-size: 13px;
+  color: var(--gray-500);
+  font-weight: 400;
+}
+
+.planCredits {
+  font-size: 12.5px;
+  color: var(--gray-500);
+  margin-bottom: 16px;
+}
+
+.planFeatures {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1;
+  margin-bottom: 18px;
+}
+
+.planFeature {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--gray-700);
+}
+
+.planFeature svg {
+  color: var(--gray-500);
+  flex-shrink: 0;
+}
+
+.planBtn {
+  height: 36px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--gray-900);
+  font-family: var(--font);
+  transition: all var(--transition);
+}
+
+.planBtn:hover:not(:disabled) {
+  background: var(--gray-50);
+}
+
+.planBtnCurrent {
+  background: var(--gray-100);
+  color: var(--gray-500);
+  cursor: default;
+}
+
+/* History */
+.historyList {
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.historyItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.historyItem:last-child {
+  border-bottom: none;
+}
+
+.historyAction {
+  font-size: 13.5px;
+  color: var(--gray-900);
+  margin-bottom: 2px;
+}
+
+.historyDate {
+  font-size: 12px;
+  color: var(--gray-400);
+}
+
+.historyCredits {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.creditsMinus {
+  color: var(--gray-700);
+}
+
+.creditsPlus {
+  color: #16a34a;
+}
+
+@media (max-width: 768px) {
+  .page { padding: 24px 20px 48px; }
+  .packsGrid { grid-template-columns: 1fr; }
+  .plansGrid { grid-template-columns: 1fr; }
+  .balanceCard { flex-direction: column; }
+}
