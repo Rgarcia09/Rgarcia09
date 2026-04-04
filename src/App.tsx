@@ -10,6 +10,7 @@ import History from './pages/History'
 import Credits from './pages/Credits'
 import Settings from './pages/Settings'
 import AppLayout from './components/AppLayout'
+import DAW from './pages/DAW'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/daw" element={<DAW />} />
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/new" element={<NewRender />} />

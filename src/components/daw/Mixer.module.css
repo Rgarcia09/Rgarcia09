@@ -1,0 +1,205 @@
+.mixer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #13132a;
+  overflow: hidden;
+}
+
+.mixerHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  background: #1a1a38;
+  border-bottom: 1px solid #2a2a4a;
+  flex-shrink: 0;
+}
+
+.mixerTitle {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #5050a0;
+}
+
+.mixerHint {
+  font-size: 10px;
+  color: #3a3a6a;
+  margin-left: auto;
+}
+
+.strips {
+  display: flex;
+  gap: 2px;
+  padding: 12px;
+  overflow-x: auto;
+  flex: 1;
+  align-items: flex-end;
+}
+
+.strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 72px;
+  flex-shrink: 0;
+  background: #1a1a35;
+  border: 1px solid #2a2a4a;
+  border-radius: 8px;
+  padding: 10px 8px;
+}
+
+.masterStrip {
+  border-color: #3a3a7a;
+  background: #1c1c40;
+}
+
+.stripName {
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.3px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+/* Pan knob */
+.knob {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #252545;
+  border: 1px solid #3a3a6a;
+  cursor: ns-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 120ms ease;
+  flex-shrink: 0;
+}
+
+.knob:hover {
+  border-color: #7c6af5;
+}
+
+.knobInner {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #3a3a6a, #1a1a35);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 2px;
+}
+
+.knobDot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #c8c0ff;
+}
+
+.panLabel {
+  font-size: 9px;
+  font-family: 'Courier New', monospace;
+  color: #4a4a7a;
+  text-align: center;
+  min-height: 12px;
+}
+
+/* VU meter */
+.vu {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 80px;
+  width: 48px;
+  background: #0e0e25;
+  border: 1px solid #1e1e38;
+  border-radius: 4px;
+  padding: 4px 3px;
+  flex-shrink: 0;
+}
+
+.vuBar {
+  flex: 1;
+  border-radius: 2px 2px 0 0;
+  transition: height 80ms ease, background 80ms ease;
+  min-height: 2px;
+}
+
+/* Fader */
+.faderWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.fader {
+  -webkit-appearance: slider-vertical;
+  appearance: slider-vertical;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 24px;
+  height: 120px;
+  accent-color: #7c6af5;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+
+.volLabel {
+  font-size: 9px;
+  font-family: 'Courier New', monospace;
+  color: #4a4a7a;
+  text-align: center;
+  min-height: 12px;
+}
+
+.stripButtons {
+  display: flex;
+  gap: 4px;
+  min-height: 22px;
+}
+
+.stripBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid #2a2a4a;
+  background: #1e1e38;
+  color: #4a4a7a;
+  cursor: pointer;
+  font-size: 9px;
+  transition: all 120ms ease;
+}
+
+.stripBtn:hover {
+  color: #c8c0ff;
+}
+
+.stripBtnMute {
+  background: #3a1a1a;
+  color: #e05c5c;
+  border-color: #e05c5c;
+}
+
+.stripBtnSolo {
+  background: #2a2a10;
+  color: #d4c44a;
+  border-color: #d4c44a;
+}
