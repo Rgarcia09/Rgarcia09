@@ -1,0 +1,207 @@
+.pianoRoll {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #13132a;
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #1a1a38;
+  border-bottom: 1px solid #2a2a4a;
+  flex-shrink: 0;
+}
+
+.toolbarTitle {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.tools {
+  display: flex;
+  gap: 6px;
+}
+
+.toolBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: 1px solid #2a2a4a;
+  background: #1e1e38;
+  color: #6060a0;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.toolBtn:hover {
+  color: #c8c0ff;
+  border-color: #5a4af5;
+}
+
+.toolBtnActive {
+  background: #2e2b50;
+  color: #c8c0ff;
+  border-color: #7c6af5;
+}
+
+.toolbarHint {
+  font-size: 10px;
+  color: #3a3a6a;
+  margin-left: auto;
+}
+
+.editor {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  width: 56px;
+  flex-shrink: 0;
+  background: #111128;
+  border-right: 1px solid #2a2a4a;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.keyboard::-webkit-scrollbar { display: none; }
+
+.key {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 6px;
+  cursor: pointer;
+  transition: filter 80ms ease;
+  position: relative;
+  border-bottom: 1px solid transparent;
+}
+
+.key:hover {
+  filter: brightness(1.4);
+}
+
+.keyWhite {
+  background: #1e1e3a;
+  border-bottom-color: #2a2a4a;
+}
+
+.keyBlack {
+  background: #0e0e25;
+}
+
+.keyC {
+  border-bottom-color: #3a3a6a;
+}
+
+.keyLabel {
+  font-size: 8px;
+  color: #5050a0;
+  font-family: 'Courier New', monospace;
+  pointer-events: none;
+}
+
+.gridWrapper {
+  flex: 1;
+  overflow: auto;
+  cursor: crosshair;
+  position: relative;
+}
+
+.grid {
+  position: relative;
+  min-width: 100%;
+}
+
+.rowLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #1e1e3a;
+  pointer-events: none;
+}
+
+.rowLineBlack {
+  background: #111128;
+}
+
+.rowLineC {
+  border-bottom-color: #2a2a5a;
+}
+
+.colLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #1e1e3a;
+  pointer-events: none;
+}
+
+.colLineBeat {
+  background: #2a2a5a;
+}
+
+.colLineCurrent {
+  background: rgba(124, 106, 245, 0.5) !important;
+  width: 2px;
+}
+
+.note {
+  position: absolute;
+  border-radius: 3px;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  z-index: 2;
+  opacity: 0.9;
+  transition: opacity 80ms ease;
+}
+
+.note:hover {
+  opacity: 1;
+}
+
+.note:active {
+  cursor: grabbing;
+}
+
+.noteLabel {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  padding: 0 3px;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.noteResizeHandle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: ew-resize;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0 3px 3px 0;
+}
+
+.noteResizeHandle:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
