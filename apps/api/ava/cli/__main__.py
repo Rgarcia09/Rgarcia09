@@ -14,8 +14,9 @@ from sqlalchemy import select
 
 from ava.config import get_settings
 from ava.core.passwords import hash_password, validate_password_strength
+from ava.db.base import utcnow
 from ava.db.session import get_sessionmaker
-from ava.models import User
+from ava.models import SyncJob, User
 from ava.services import audit
 from ava.services.auth import normalize_email
 
@@ -76,6 +77,25 @@ def seed_demo(_: argparse.Namespace) -> int:
     return 0
 
 
+def record_job(args: argparse.Namespace) -> int:
+    """Record an externally-run job (e.g. scripts/backup.sh) in the job history."""
+    stats = dict(item.split("=", 1) for item in args.stat or [] if "=" in item)
+    now = utcnow()
+    with get_sessionmaker()() as db:
+        db.add(
+            SyncJob(
+                job_type=args.type,
+                status=args.status,
+                started_at=now,
+                finished_at=now,
+                stats=stats,
+                error=args.error,
+            )
+        )
+        db.commit()
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="ava.cli")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -92,6 +112,12 @@ def main(argv: list[str] | None = None) -> int:
     cu.set_defaults(func=create_user)
     sd = sub.add_parser("seed-demo", help="Load clearly-labelled demo data (dev only)")
     sd.set_defaults(func=seed_demo)
+    rj = sub.add_parser("record-job", help="Record an external job run (backups, imports)")
+    rj.add_argument("--type", required=True)
+    rj.add_argument("--status", choices=["succeeded", "failed"], required=True)
+    rj.add_argument("--stat", action="append", help="key=value (repeatable)")
+    rj.add_argument("--error")
+    rj.set_defaults(func=record_job)
     args = parser.parse_args(argv)
     return int(args.func(args))
 

@@ -50,3 +50,25 @@ def test_relative_dates() -> None:
     assert relative(date(2026, 10, 1), t) == "tomorrow"
     assert relative(date(2026, 9, 27), t) == "3 days overdue"
     assert relative(date(2026, 10, 10), t) == "in 10 days"
+
+
+def test_cli_record_job(db) -> None:  # type: ignore[no-untyped-def]
+    from sqlalchemy import select
+
+    from ava.cli.__main__ import main
+    from ava.models import SyncJob
+
+    assert (
+        main(
+            ["record-job", "--type", "backup", "--status", "succeeded", "--stat", "path=/backups/x"]
+        )
+        == 0
+    )
+    job = db.scalars(select(SyncJob)).one()
+    assert job.job_type == "backup" and job.stats == {"path": "/backups/x"}
+
+
+def test_cli_seed_demo_refused_without_demo_mode() -> None:
+    from ava.cli.__main__ import main
+
+    assert main(["seed-demo"]) == 1

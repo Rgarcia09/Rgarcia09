@@ -1,0 +1,24 @@
+# Development helpers: run only the data services in Docker and the apps natively.
+#
+#   docker compose -f docker-compose.dev.yml up -d
+#   (see README.md → Development)
+name: ava-dev
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: ava_dev
+      POSTGRES_USER: ava
+      POSTGRES_PASSWORD: ava_dev_pw
+    ports: ["127.0.0.1:5432:5432"]
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+      - ./infrastructure/dev/init-test-db.sql:/docker-entrypoint-initdb.d/10-test-db.sql:ro
+
+  redis:
+    image: redis:7-alpine
+    ports: ["127.0.0.1:6379:6379"]
+
+volumes:
+  pgdata_dev:

@@ -1,0 +1,124 @@
+# AVA — production-style deployment on the office server.
+#
+#   cp .env.example .env    # then set the required values (or run scripts/setup.sh)
+#   docker compose up -d --build
+#
+# Only the reverse proxy publishes ports. Database, cache and AI engine are reachable only
+# on the private "backend" network, which has no route to the Internet.
+name: ava
+
+x-api-env: &api-env
+  APP_ENV: ${APP_ENV:-production}
+  AVA_NAME: ${AVA_NAME:-AVA}
+  OFFICE_NAME: ${OFFICE_NAME:-Architecture Office}
+  INTERNAL_URL: https://${AVA_HOSTNAME:-ava.office.local}
+  OFFICE_TIMEZONE: ${OFFICE_TIMEZONE:-America/Puerto_Rico}
+  DATABASE_URL: postgresql+psycopg://ava:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@db:5432/ava
+  REDIS_URL: redis://redis:6379/0
+  SECRET_KEY: ${SECRET_KEY:?set SECRET_KEY in .env}
+  COOKIE_SECURE: "true"
+  ALLOWED_HOSTS: ${AVA_HOSTNAME:-ava.office.local},api,localhost,127.0.0.1
+  TRUSTED_PROXY_COUNT: "1"
+  STRICT_LOCAL_MODE: ${STRICT_LOCAL_MODE:-true}
+  AI_PROVIDER: ${AI_PROVIDER:-ollama}
+  AI_BASE_URL: ${AI_BASE_URL:-http://ollama:11434}
+  AI_MODEL: ${AI_MODEL:-llama3.1:8b-instruct-q4_K_M}
+  AI_TIMEOUT_SECONDS: ${AI_TIMEOUT_SECONDS:-120}
+  EMBEDDING_MODEL: ${EMBEDDING_MODEL:-nomic-embed-text}
+  DEMO_MODE: ${DEMO_MODE:-false}
+  LOG_LEVEL: ${LOG_LEVEL:-INFO}
+
+services:
+  db:
+    # pgvector image: PostgreSQL 16 + the vector extension used from Phase 2 onwards.
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ava
+      POSTGRES_USER: ava
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks: [backend]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ava -d ava"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    networks: [backend]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build: ./apps/api
+    image: ava/api:local
+    restart: unless-stopped
+    environment: *api-env
+    depends_on:
+      db: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    networks: [backend, frontend]
+
+  web:
+    build: ./apps/web
+    image: ava/web:local
+    restart: unless-stopped
+    environment:
+      API_INTERNAL_URL: http://api:8000
+    depends_on: [api]
+    networks: [frontend]
+
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      AVA_HOSTNAME: ${AVA_HOSTNAME:-ava.office.local}
+      AVA_TLS: ${AVA_TLS:-internal}
+    ports:
+      # Bind to the server's LAN address in .env (AVA_BIND_ADDRESS) to avoid exposing AVA
+      # on other interfaces. Never port-forward these from the Internet.
+      - "${AVA_BIND_ADDRESS:-0.0.0.0}:443:443"
+      - "${AVA_BIND_ADDRESS:-0.0.0.0}:80:80"
+    volumes:
+      - ./infrastructure/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./infrastructure/certs:/certs:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [web, api]
+    networks: [frontend]
+
+  # Local LLM engine. Optional profile: enable with `--profile local-ai`, or point
+  # AI_BASE_URL at an existing Ollama/vLLM server on the office network.
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["local-ai"]
+    restart: unless-stopped
+    volumes:
+      - ollama:/root/.ollama
+    # "egress" is used only to download model weights; prompts never leave this host.
+    networks: [backend, egress]
+    # For an NVIDIA GPU, uncomment (requires the NVIDIA container toolkit):
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices: [{ driver: nvidia, count: all, capabilities: [gpu] }]
+
+networks:
+  backend:
+    internal: true
+  frontend: {}
+  egress: {}
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:
+  ollama:

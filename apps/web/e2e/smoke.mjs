@@ -9,8 +9,15 @@ const password = process.env.AVA_PASSWORD;
 const shots = process.argv[2];
 if (!email || !password) throw new Error("Set AVA_EMAIL and AVA_PASSWORD");
 
-const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
-const page = await browser.newPage({ viewport: { width: 1360, height: 900 } });
+// AVA_RESOLVE maps the hostname for testing before internal DNS exists, e.g.
+// AVA_RESOLVE="MAP ava.office.local 127.0.0.1". AVA_TEST_IGNORE_TLS=1 is for a throwaway
+// test run against Caddy's internal CA only; real devices must trust the CA instead.
+const args = process.env.AVA_RESOLVE ? [`--host-resolver-rules=${process.env.AVA_RESOLVE}`] : [];
+const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args });
+const page = await browser.newPage({
+  viewport: { width: 1360, height: 900 },
+  ignoreHTTPSErrors: process.env.AVA_TEST_IGNORE_TLS === "1",
+});
 const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));
 const step = async (name, fn) => {
