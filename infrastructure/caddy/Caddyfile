@@ -1,0 +1,52 @@
+# AVA reverse proxy. Serves HTTPS on the office network only.
+#
+# TLS options (set AVA_TLS in .env):
+#   internal                                    Caddy's own internal CA (default). Install the
+#                                               root certificate on office devices once — see
+#                                               docs/DEPLOYMENT.md.
+#   /certs/ava.crt /certs/ava.key               Certificate issued by the office's CA
+#                                               (place files in infrastructure/certs/).
+{
+	# Never contact public ACME CAs: AVA is not exposed to the Internet.
+	auto_https disable_redirects
+	admin off
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+{$AVA_HOSTNAME:ava.office.local} {
+	tls {$AVA_TLS:internal}
+
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "same-origin"
+		-Server
+	}
+
+	request_body {
+		max_size 25MB
+	}
+
+	@api path /api/* /health /health/*
+	handle @api {
+		reverse_proxy api:8000
+	}
+	handle {
+		reverse_proxy web:3000
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}
+
+# Plain HTTP only redirects to HTTPS.
+http://{$AVA_HOSTNAME:ava.office.local} {
+	redir https://{host}{uri} permanent
+}
